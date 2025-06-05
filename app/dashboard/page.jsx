@@ -20,7 +20,7 @@ export default function DashboardPage() {
     }
   }, [status, router]);
 
-  // Fetch user docs
+  // Fetch documents
   useEffect(() => {
     const fetchDocs = async () => {
       if (!session?.user?.email) return;
@@ -29,8 +29,8 @@ export default function DashboardPage() {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/realdocs/docs/user/${session.user.email}`);
         const data = await res.json();
         setDocuments(data);
-      } catch (error) {
-        console.error('Failed to fetch documents', error);
+      } catch (err) {
+        console.error("Failed to fetch documents", err);
       } finally {
         setLoading(false);
       }
@@ -40,39 +40,52 @@ export default function DashboardPage() {
   }, [session]);
 
   const handleCreate = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/realdocs/docs/create`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: 'Untitled Document',
-        content: '',
-        owner: session.user.email,
-      }),
-    });
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/realdocs/docs/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: 'Untitled Document',
+          content: '',
+          owner: session.user.email,
+        }),
+      });
 
-    const newDoc = await res.json();
-    router.push(`/editor/${newDoc._id}`);
+      const newDoc = await res.json();
+      router.push(`/editor/${newDoc._id}`);
+    } catch (err) {
+      toast.error('Failed to create document');
+    }
   };
 
   const handleDelete = async (id) => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/realdocs/docs/${id}`, { method: 'DELETE' });
-    toast.success("Document deleted successfully")
-    setDocuments((prev) => prev.filter((doc) => doc._id !== id));
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/realdocs/docs/${id}`, { method: 'DELETE' });
+      toast.success("Document deleted successfully");
+      setDocuments((prev) => prev.filter((doc) => doc._id !== id));
+    } catch (err) {
+      toast.error("Failed to delete document");
+    }
   };
 
-  const { user } = session || {};
-
-  if (status === 'loading' || !user) {
+  if (status === 'loading') {
     return <div className="text-center mt-20 text-xl">Loading...</div>;
   }
 
+  if (!session?.user) {
+    return null; // or redirect
+  }
+
+  const { user } = session;
+
   return (
-    <div className="min-h-screen  pt-24 px-4 md:px-8">
+    <div className="min-h-screen pt-24 px-4 md:px-8">
       <div className="max-w-6xl mx-auto">
-        <Link href="/" className='flex text-center gap-1.5 w-[90px] border px-1.5 py-2 rounded-full items-center'>
-          <FaArrowLeft></FaArrowLeft>
+        <Link href="/" className="flex text-center gap-1.5 w-[90px] border px-1.5 py-2 rounded-full items-center">
+          <FaArrowLeft />
           <span>Back</span>
         </Link>
+
         <h1 className="text-3xl font-bold text-center mb-8">Welcome to Your Dashboard</h1>
 
         <div className="bg-white shadow-md rounded-xl p-6 flex flex-col md:flex-row items-center gap-6">
@@ -90,7 +103,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* New Document Button */}
         <div className="flex justify-end mt-8">
           <button
             onClick={handleCreate}
@@ -100,7 +112,6 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        {/* Document List */}
         <div className="mt-6">
           <h3 className="text-xl font-bold mb-4">Your Documents</h3>
           {loading ? (
@@ -121,10 +132,7 @@ export default function DashboardPage() {
                     </p>
                   </div>
                   <div className="flex justify-between items-center mt-4">
-                    <Link
-                      href={`/editor/${doc._id}`}
-                      className="text-blue-600 hover:underline text-sm"
-                    >
+                    <Link href={`/editor/${doc._id}`} className="text-blue-600 hover:underline text-sm">
                       Edit
                     </Link>
                     <button
