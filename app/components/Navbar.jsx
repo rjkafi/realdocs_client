@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FaRegFileAlt } from 'react-icons/fa';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -13,6 +14,7 @@ export default function Navbar() {
   const user = session?.user;
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <nav className="fixed top-0 left-0 w-full bg-white shadow-md border-b border-gray-300 z-50">
       <div className="container mx-auto px-4 lg:px-8 py-3 flex justify-between items-center">
         {/* Logo + Name */}
@@ -64,5 +66,6 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
+    </Suspense>
   );
 }

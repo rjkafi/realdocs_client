@@ -35,6 +35,7 @@ export default function LoginPage() {
   };
 
   return (
+    <Suspense fallback={<div />}>
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md text-center">
         <h1 className="text-3xl font-bold mb-6 text-gray-800">Welcome to Real Docs</h1>
@@ -104,5 +105,6 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+    </Suspense>
   );
 }
