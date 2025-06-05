@@ -1,10 +1,11 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useState, Suspense } from 'react';
 
-export default function LoginPage() {
+// Child component that safely uses useSearchParams
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
@@ -35,16 +36,15 @@ export default function LoginPage() {
   };
 
   return (
-    <Suspense fallback={<div />}>
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md text-center">
         <h1 className="text-3xl font-bold mb-6 text-gray-800">Welcome to Real Docs</h1>
 
-        {/* <form onSubmit={handleSubmit} className="space-y-4 text-left">
+        {/* You can uncomment this if using email/password login */}
+        {/* 
+        <form onSubmit={handleSubmit} className="space-y-4 text-left">
           <h2 className="text-xl font-semibold">Log In</h2>
-
           {error && <p className="text-red-500 text-sm">{error}</p>}
-
           <input
             type="email"
             name="email"
@@ -54,7 +54,6 @@ export default function LoginPage() {
             required
             className="w-full px-4 py-2 border rounded"
           />
-
           <input
             type="password"
             name="password"
@@ -64,14 +63,14 @@ export default function LoginPage() {
             required
             className="w-full px-4 py-2 border rounded"
           />
-
           <button
             type="submit"
             className="bg-blue-600 text-white py-2 w-full rounded hover:bg-blue-700"
           >
             Log In
           </button>
-        </form> */}
+        </form>
+        */}
 
         <div className="mt-4">
           <button
@@ -105,6 +104,14 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Parent component that wraps the form in Suspense
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginForm />
     </Suspense>
   );
 }
