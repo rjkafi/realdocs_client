@@ -39,7 +39,7 @@ export default function LoginPage() {
       <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md text-center">
         <h1 className="text-3xl font-bold mb-6 text-gray-800">Welcome to Real Docs</h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-left">
+        {/* <form onSubmit={handleSubmit} className="space-y-4 text-left">
           <h2 className="text-xl font-semibold">Log In</h2>
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -70,7 +70,7 @@ export default function LoginPage() {
           >
             Log In
           </button>
-        </form>
+        </form> */}
 
         <div className="mt-4">
           <button

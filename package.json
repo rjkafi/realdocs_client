@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/package",
   "name": "real_docs_client",
   "version": "0.1.0",
   "private": true,

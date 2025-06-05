@@ -5,6 +5,8 @@ import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import socket from '@/app/utils/socket'; // 
 import ProtectedEditor from '@/app/components/ProtectedEditor';
+import Link from 'next/link';
+import { FaArrowLeft } from 'react-icons/fa';
 
 export default function EditorPage() {
     const { id } = useParams();
@@ -82,8 +84,12 @@ export default function EditorPage() {
     };
 
     return (
-        <div className="my-16 py-4">
+        <div className="my-20 py-4">
             <div className={`max-w-5xl mx-auto bg-white shadow-md rounded p-4 transition-all duration-300 ${flashUpdate ? 'ring-2 ring-green-400' : ''}`}>
+                <Link href="/dashboard" className='flex text-center gap-1.5 w-[90px] border px-1.5 py-2 rounded-full items-center'>
+                <FaArrowLeft></FaArrowLeft>
+                <span>Back</span>
+                </Link>
                 <div className="flex flex-wrap gap-2 justify-between items-center mb-4">
                     <h1 className="text-xl font-bold">{title}</h1>
                     <div className="flex items-center gap-4">

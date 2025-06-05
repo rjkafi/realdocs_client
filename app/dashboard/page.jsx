@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { FaArrowLeft } from 'react-icons/fa';
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -68,6 +69,10 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen  pt-24 px-4 md:px-8">
       <div className="max-w-6xl mx-auto">
+        <Link href="/" className='flex text-center gap-1.5 w-[90px] border px-1.5 py-2 rounded-full items-center'>
+          <FaArrowLeft></FaArrowLeft>
+          <span>Back</span>
+        </Link>
         <h1 className="text-3xl font-bold text-center mb-8">Welcome to Your Dashboard</h1>
 
         <div className="bg-white shadow-md rounded-xl p-6 flex flex-col md:flex-row items-center gap-6">
